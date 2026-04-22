@@ -98,19 +98,7 @@
 
     /* Redesigned orb visual to look exactly like the galaxy orb in image_0.png */
     .hero-orb-wrap { margin:5rem auto 0; width:160px; height:160px; position:relative; }
-    .hero-orb { width:100%;height:100%; border-radius:50%; background: radial-gradient(circle at center, #FFFFFF, #AEE2FF 30%, var(--accent2) 60%, rgba(10, 17, 24, 0) 100%); border: 1px solid rgba(255, 255, 255, 0.3); animation:lev 5s ease-in-out infinite, shim 8s ease-in-out infinite; box-shadow: 0 0 100px var(--orb-glow);
-  /* ... altre proprietà esistenti ... */
-  
-  /* Aggiungi questa riga per gestire il movimento */
-  transform: translate(var(--mouse-x, 0), var(--mouse-y, 0));
-  
-  /* Assicurati che la transizione sia fluida */
-  transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
-  
-  /* Importante: rimuovi l'animazione 'lev' da qui se vuoi che il mouse abbia il controllo totale, 
-     oppure lasciala se vuoi che la sfera continui a fluttuare mentre la sposti. */
-  animation: lev 5s ease-in-out infinite, shim 8s ease-in-out infinite;
-}
+    .hero-orb { width:100%;height:100%; border-radius:50%; background: radial-gradient(circle at center, #FFFFFF, #AEE2FF 30%, var(--accent2) 60%, rgba(10, 17, 24, 0) 100%); border: 1px solid rgba(255, 255, 255, 0.3); box-shadow: 0 0 100px var(--orb-glow); transform: translate(var(--mouse-x, 0), var(--mouse-y, 0)); transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1); animation: lev 5s ease-in-out infinite, shim 8s ease-in-out infinite; }
     .hero-orb::before { content:''; position:absolute; inset:-30px; border-radius:50%; border:1px solid rgba(239, 244, 249, 0.1); animation:lev 5s ease-in-out infinite reverse; }
     .hero-orb::after { content:''; position:absolute; inset:-1px; border-radius:50%; background: linear-gradient(135deg, rgba(164, 255, 240, 0.2), transparent, rgba(198, 170, 255, 0.2)); filter: blur(2px); }
     @keyframes lev { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-18px)} }
@@ -228,18 +216,189 @@
     .rv { opacity:0; transform:translateY(25px); transition:opacity .8s ease,transform .8s ease; }
     .rv.in { opacity:1; transform:translateY(0); }
 
-    /* Responsive adjustments */
-    @media (max-width:960px) {
-      nav { padding:1rem 2rem; }
-      .nav-links { display:none; }
-      section { padding:6rem 2rem; }
-      h1 { font-size:3.8rem; }
-      .about-grid,.edu-grid,.ct-inner { grid-template-columns:1fr; gap:3rem; }
-      .pgrid { grid-template-columns:1fr; gap: 1rem; }
-      .proj.wide { grid-column:span 1; }
-      .exp-item { grid-template-columns:1fr; gap:.8rem; }
+    /* ── HAMBURGER BUTTON ── */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: 1px solid var(--glass-b);
+      border-radius: 10px;
+      cursor: pointer;
+      padding: 0;
+      z-index: 200;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 18px;
+      height: 1.5px;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: transform 0.35s cubic-bezier(0.23,1,0.32,1), opacity 0.25s ease, width 0.3s ease;
+      transform-origin: center;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* ── MOBILE DRAWER OVERLAY ── */
+    .nav-drawer {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 150;
+      pointer-events: none;
+    }
+    .nav-drawer-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(10, 17, 24, 0.75);
+      backdrop-filter: blur(6px);
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+    .nav-drawer-panel {
+      position: absolute;
+      top: 0; right: 0;
+      width: min(300px, 80vw);
+      height: 100%;
+      background: rgba(14, 22, 33, 0.97);
+      border-left: 1px solid var(--glass-b);
+      backdrop-filter: blur(40px);
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.23,1,0.32,1);
+      display: flex;
+      flex-direction: column;
+      padding: 5.5rem 2rem 3rem;
+      gap: 0;
+    }
+    .nav-drawer.open {
+      pointer-events: all;
+    }
+    .nav-drawer.open .nav-drawer-backdrop { opacity: 1; }
+    .nav-drawer.open .nav-drawer-panel { transform: translateX(0); }
+
+    .drawer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      flex: 1;
+    }
+    .drawer-links li {
+      border-bottom: 1px solid var(--glass-b);
+    }
+    .drawer-links a {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.1rem 0.5rem;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 1rem;
+      letter-spacing: 0.04em;
+      font-weight: 400;
+      transition: color 0.25s, padding-left 0.25s;
+    }
+    .drawer-links a .dl-num {
+      font-family: var(--font-display);
+      font-size: 0.62rem;
+      color: var(--accent);
+      opacity: 0.5;
+      letter-spacing: 0.15em;
+      min-width: 2.5rem;
+    }
+    .drawer-links a:hover,
+    .drawer-links a.active {
+      color: var(--accent);
+      padding-left: 0.5rem;
+    }
+    .drawer-links a.active .dl-num { opacity: 1; }
+
+    .drawer-cta {
+      margin-top: 2rem;
+      display: block;
+      text-align: center;
+      padding: 1rem;
+      border: 1px solid rgba(174, 226, 255, 0.4);
+      background: rgba(174, 226, 255, 0.08);
+      border-radius: 40px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      transition: background 0.25s;
+    }
+    .drawer-cta:hover { background: rgba(174, 226, 255, 0.15); }
+
+    .drawer-footer {
+      margin-top: 2rem;
+      font-family: var(--font-display);
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      opacity: 0.4;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+      .nav-drawer { display: block; }
+
+      section { padding: 5.5rem 1.5rem; }
+      #hero { padding: 7rem 1.5rem 3rem; }
+      h1 { font-size: clamp(3rem, 12vw, 4.5rem); }
+      h2 { font-size: clamp(2rem, 8vw, 3rem); margin-bottom: 2rem; }
+
+      .hero-role { font-size: 0.75rem; letter-spacing: 0.15em; margin: 1.5rem 0; }
+      .hero-desc { font-size: 0.95rem; margin-bottom: 2.5rem; }
+      .hero-btns { gap: 0.8rem; }
+      .btn { padding: 0.85rem 1.8rem; font-size: 0.85rem; }
+      .hero-orb-wrap { width: 120px; height: 120px; margin-top: 3.5rem; }
+
+      .about-grid,
+      .edu-grid,
+      .ct-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+
+      .gc { padding: 1.6rem 1.8rem; }
+
+      .pgrid { grid-template-columns: 1fr; gap: 1rem; }
+      .proj.wide { grid-column: span 1; }
+      .proj { padding: 1.8rem; }
+
+      .exp-item { grid-template-columns: 1fr; gap: 0.4rem; padding: 2rem 0; }
+      .exp-date { display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
+      .now { margin-top: 0; }
+
+      .pill { font-size: 0.72rem; padding: 0.4rem 0.9rem; }
+      .cert { padding: 0.7rem 1.1rem; }
+
       .ct-inner p { max-width: none; }
-      footer { flex-direction:column; gap:.8rem; text-align:center; padding: 2rem; }
+      .ct-link { padding: 1rem 1.2rem; font-size: 0.9rem; }
+
+      footer { flex-direction: column; gap: 0.6rem; text-align: center; padding: 1.8rem 1.5rem; }
+    }
+
+    @media (max-width: 480px) {
+      nav { padding: 0.9rem 1.2rem; }
+      .nav-logo { font-size: 1.1rem; }
+      section { padding: 4.5rem 1.2rem; }
+      #hero { padding: 6.5rem 1.2rem 2.5rem; }
+      h1 { font-size: clamp(2.8rem, 14vw, 4rem); }
+      .hero-status { font-size: 0.7rem; padding: 0.35rem 0.9rem; }
+      .pgrid { gap: 0.8rem; }
+      .proj { padding: 1.5rem 1.4rem; }
+      .gc { padding: 1.4rem 1.5rem; }
     }
   </style>
 </head>
@@ -264,7 +423,26 @@
     <li><a href="#contact">Contact</a></li>
   </ul>
   <a href="mailto:depontimichele13@gmail.com" class="nav-cta">Get in touch</a>
+  <button class="nav-hamburger" id="hamburger" aria-label="Open navigation" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- Mobile Drawer -->
+<div class="nav-drawer" id="navDrawer" aria-hidden="true">
+  <div class="nav-drawer-backdrop" id="drawerBackdrop"></div>
+  <div class="nav-drawer-panel" role="dialog" aria-label="Navigation menu">
+    <ul class="drawer-links">
+      <li><a href="#about" class="drawer-link"><span class="dl-num">01</span>About</a></li>
+      <li><a href="#projects" class="drawer-link"><span class="dl-num">02</span>Projects</a></li>
+      <li><a href="#experience" class="drawer-link"><span class="dl-num">03</span>Experience</a></li>
+      <li><a href="#education" class="drawer-link"><span class="dl-num">04</span>Education</a></li>
+      <li><a href="#contact" class="drawer-link"><span class="dl-num">05</span>Contact</a></li>
+    </ul>
+    <a href="mailto:depontimichele13@gmail.com" class="drawer-cta">Get in touch</a>
+    <div class="drawer-footer">Milan, Italy · Erasmus+ Ready</div>
+  </div>
+</div>
 
 <section id="hero">
   <div class="hero-inner">
@@ -287,16 +465,16 @@
         <div class="eyebrow">01 — About</div>
         <h2>Ops mindset.<br><em>Dev skillset.</em></h2>
         <div class="award-chip">✦ FORMAMENTIS InnovACTION Award 2018</div>
-         <p>
+          <p>
             I am a <strong>problem solver</strong> with a technical background in electronics and industrial automation. I specialize in <strong>Software Development, DevOps, and AI</strong>, bridging the gap between industrial operations and modern cloud technology.
           </p>
           <p>
             Through intensive hands-on work at <strong>IFOA Milan</strong>, I have mastered <strong>Python, Java, Docker, and Linux</strong>. My operational background means I don’t just build systems—I understand how to keep them stable when they scale.
           </p>
-          <p>
+          <p class="status-line">
             I am currently <strong>available for freelance projects and professional opportunities</strong> where I can apply my automation instincts to cloud-native infrastructure.
           </p>
-      </div>
+        </div>
       <div class="skills-panel rv">
         <div>
           <div class="sg-label">DevOps & Programming</div>
@@ -352,7 +530,7 @@
         <div class="proj-glyph">🌐</div>
         <div class="proj-title">Interactive Web Dashboard</div>
         <p class="proj-desc">Modern, responsive web application built with a focus on clean UI and semantic structure. Implemented CSS Flexbox/Grid for layout fluidly across devices and used JavaScript for dynamic DOM manipulation and state management.</p>
-        <div class="proj-tags"><span class="proj-tag">HTML5</span><span class="proj-tag">CSS3</span><span class="proj-tag">JavaScript</span><span class="proj-tag">Responsive Design</span></div><span class="proj-tag">UI/UX</span>
+        <div class="proj-tags"><span class="proj-tag">HTML5</span><span class="proj-tag">CSS3</span><span class="proj-tag">JavaScript</span><span class="proj-tag">Responsive Design</span><span class="proj-tag">UI/UX</span></div>
       </div>
       <div class="proj ac">
         <div class="proj-num">05 / 06</div>
@@ -471,41 +649,80 @@
 </footer>
 
 <script>
-  /* Use Outfit as default body font for IntersectionObserver, as Cormorant is removed */
+  // ── Reveal on scroll ──
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); } });
   }, { threshold: 0.08 });
   document.querySelectorAll('.rv').forEach(el => obs.observe(el));
 
+  // ── Active nav link on scroll (desktop) ──
   window.addEventListener('scroll', () => {
     const y = window.scrollY;
-    document.querySelectorAll('.nav-links a').forEach(a => {
+    document.querySelectorAll('.nav-links a, .drawer-link').forEach(a => {
       const s = document.querySelector(a.getAttribute('href'));
-      a.style.color = s && y >= s.offsetTop-140 && y < s.offsetTop+s.offsetHeight-100 ? 'var(--accent)' : '';
+      const isActive = s && y >= s.offsetTop - 140 && y < s.offsetTop + s.offsetHeight - 100;
+      a.style.color = isActive ? 'var(--accent)' : '';
+      if (a.classList.contains('drawer-link')) {
+        a.classList.toggle('active', isActive);
+      }
     });
   });
- 
-  const orb = document.querySelector('.hero-orb');
+
+  // ── Hamburger / Drawer ──
+  const hamburger = document.getElementById('hamburger');
+  const drawer    = document.getElementById('navDrawer');
+  const backdrop  = document.getElementById('drawerBackdrop');
+
+  function openDrawer() {
+    hamburger.classList.add('open');
+    hamburger.setAttribute('aria-expanded', 'true');
+    drawer.classList.add('open');
+    drawer.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeDrawer() {
+    hamburger.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    drawer.classList.remove('open');
+    drawer.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  hamburger.addEventListener('click', () => {
+    drawer.classList.contains('open') ? closeDrawer() : openDrawer();
+  });
+
+  backdrop.addEventListener('click', closeDrawer);
+
+  // Close on drawer link tap
+  document.querySelectorAll('.drawer-link, .drawer-cta').forEach(link => {
+    link.addEventListener('click', () => {
+      closeDrawer();
+    });
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeDrawer();
+  });
+
+  // ── Orb mouse parallax (desktop only) ──
+  const orb     = document.querySelector('.hero-orb');
   const orbWrap = document.querySelector('.hero-orb-wrap');
-
-  // Gestione del movimento all'interno dell'area della sfera
-  orbWrap.addEventListener('mousemove', (e) => {
-    const rect = orbWrap.getBoundingClientRect();
-    
-    // Calcola la posizione del mouse rispetto al centro del contenitore
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-
-    // Applica lo spostamento (puoi cambiare il divisore 2 per renderlo più o meno sensibile)
-    orb.style.setProperty('--mouse-x', `${x / 2}px`);
-    orb.style.setProperty('--mouse-y', `${y / 2}px`);
-  });
-
-  // Reset della posizione quando il mouse esce dall'area
-  orbWrap.addEventListener('mouseleave', () => {
-    orb.style.setProperty('--mouse-x', '0px');
-    orb.style.setProperty('--mouse-y', '0px');
-  });
+  if (orbWrap && window.matchMedia('(hover: hover)').matches) {
+    orbWrap.addEventListener('mousemove', (e) => {
+      const rect = orbWrap.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      orb.style.setProperty('--mouse-x', `${x / 2}px`);
+      orb.style.setProperty('--mouse-y', `${y / 2}px`);
+    });
+    orbWrap.addEventListener('mouseleave', () => {
+      orb.style.setProperty('--mouse-x', '0px');
+      orb.style.setProperty('--mouse-y', '0px');
+    });
+  }
 </script>
 </body>
 </html>
