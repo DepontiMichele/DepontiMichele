@@ -4,403 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Michele Deponti — DevOps Developer</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Space+Mono&display=swap" rel="stylesheet" />
+
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3CradialGradient id='g' cx='50%25' cy='50%25' r='50%25' fx='50%25' fy='50%25'%3E%3Cstop offset='0%25' stop-color='%23FFFFFF' /%3E%3Cstop offset='40%25' stop-color='%23AEE2FF' stop-opacity='0.8' /%3E%3Cstop offset='100%25' stop-color='%230A1118' stop-opacity='0' /%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='50' fill='url(%23g)' /%3E%3C/svg%3E" />
 
-  <style>
-    :root {
-      /* Colors derived directly from image_0.png */
-      --bg-deep:    #0A1118; /* Deepest gray-blue from the floor and shadow */
-      --bg-mid:     #101720; /* Mid-tone gray-blue */
-      --text:       #EFF4F9; /* Cool-white/silver from light linear LEDs */
-      --muted:      rgba(150, 180, 200, 0.5); /* Muted gray for secondary text */
-      
-      /* Accent colors from the galaxy orb and light trails in image_0.png */
-      --accent:     #AEE2FF; /* Cool-ice-blue (main accent) */
-      --accent2:    #C6AAFF; /* Cool-purple from the inner orb */
-      --accent3:    #A4FFF0; /* Cool-teal/seafoam from the inner orb and light trails */
-      
-      /* Glass effects with ice-blue transparency */
-      --glass:      rgba(200, 230, 255, 0.05); /* Highly transparent crystalline glass */
-      --glass-b:    rgba(200, 230, 255, 0.15); /* Slightly less transparent crystalline glass */
-      
-      /* Stylized glow colors from image_0.png */
-      --orb-glow:   rgba(174, 226, 255, 0.2); /* Soft ice-blue glow */
-      
-      /* Typography */
-      --font-body:    'Outfit', sans-serif;
-      --font-display: 'Space Mono', monospace; /* Monospaced for a dev feel, used selectively */
-      --font-thin:    'Outfit', sans-serif; /* Light weight for ultra-thin text */
-    }
-
-    /* Global Resets and Typography */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body { background: var(--bg-deep); color: var(--text); font-family: var(--font-body); font-size: 16px; line-height: 1.8; overflow-x: hidden; font-weight: 300; }
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
-
-    /* Scene / Background (Integrated look) */
-    .scene { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; opacity: 0.6; }
-    .stars { position: absolute; inset: 0;
-      background-image: 
-        radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,.6) 0%, transparent 100%),
-        radial-gradient(1px 1px at 40% 70%, rgba(255,255,255,.4) 0%, transparent 100%),
-        radial-gradient(2px 2px at 70% 15%, rgba(180,220,255,.7) 0%, transparent 100%),
-        radial-gradient(1px 1px at 85% 55%, rgba(255,255,255,.3) 0%, transparent 100%),
-        radial-gradient(1px 1px at 25% 85%, rgba(180,220,255,.5) 0%, transparent 100%),
-        radial-gradient(1px 1px at 60% 40%, rgba(255,255,255,.4) 0%, transparent 100%),
-        radial-gradient(1px 1px at 90% 80%, rgba(255,255,255,.3) 0%, transparent 100%),
-        radial-gradient(2px 2px at 50% 95%, rgba(255,255,255,.6) 0%, transparent 100%),
-        radial-gradient(1px 1px at 5% 50%, rgba(180,220,255,.4) 0%, transparent 100%),
-        radial-gradient(1.5px 1.5px at 75% 5%, rgba(255,255,255,.7) 0%, transparent 100%);
-    }
-    .streak { position: absolute; width: 120px; height: 1.5px; background: linear-gradient(90deg,transparent,rgba(180,220,255,.5),transparent); animation: shoot 12s linear infinite; }
-    .s1 { top: 15%; left: 5%; animation-delay:0s; transform:rotate(-15deg); }
-    .s2 { top: 55%; right: 10%; animation-delay:-5s; transform:rotate(12deg); }
-    .s3 { top: 75%; left: 60%; animation-delay:-8s; transform:rotate(-8deg); }
-    @keyframes shoot { 0%,100%{opacity:0} 30%,70%{opacity:1} 50%{transform:translateX(40px) rotate(-15deg)} }
-    /* Added linear light effects to the scene */
-    .light-linear { position: absolute; background: linear-gradient(90deg, transparent, rgba(239, 244, 249, 0.3), transparent); }
-    .light-linear-1 { top: 30%; left: -20%; width: 140%; height: 1px; transform: rotate(-10deg); }
-    .light-linear-2 { top: 60%; left: -20%; width: 140%; height: 1px; transform: rotate(10deg); }
-
-    /* Navigation */
-    nav { position: fixed; top:0;left:0;right:0; z-index:100; display:flex; justify-content:space-between; align-items:center; padding:1.2rem 3rem; background: rgba(10, 17, 24, 0.7); backdrop-filter:blur(25px); border-bottom:1px solid var(--glass-b); }
-    .nav-logo { font-family:var(--font-display); font-size:1.4rem; font-weight:400; letter-spacing:.1em; color:var(--text); text-decoration:none; display: flex; align-items: center; gap: 0.5rem; }
-    /* Stylized galaxy icon near logo */
-    .nav-logo-icon { width: 1.4rem; height: 1.4rem; border-radius: 50%; background: radial-gradient(circle at center, #FFFFFF, #AEE2FF 40%, rgba(10, 17, 24, 0) 100%); border: 1px solid rgba(255, 255, 255, 0.2); }
-    .nav-logo em { font-style:normal; color:var(--accent); font-weight: 700; }
-    .nav-links { display:flex; gap:2.8rem; list-style:none; }
-    .nav-links a { text-decoration:none; color:var(--muted); font-size:.85rem; letter-spacing:.05em; transition:color .3s; font-weight: 400; }
-    .nav-links a:hover { color:var(--accent); }
-    .nav-cta { background:transparent; border:1px solid var(--glass-b); color:var(--accent); padding:.6rem 1.6rem; font-size:.85rem; letter-spacing:.05em; text-decoration:none; border-radius:40px; backdrop-filter:blur(10px); transition:all .3s; font-weight: 500; }
-    .nav-cta:hover { background:rgba(174, 226, 255, 0.08); border-color:var(--accent); }
-
-    /* Hero */
-    #hero { min-height:100vh; display:flex; align-items:center; justify-content:center; position:relative; z-index:1; text-align:center; padding:10rem 2rem 5rem; }
-    .hero-inner { max-width:850px; }
-    .hero-status { display:inline-flex; align-items:center; gap:.6rem; padding:.4rem 1.2rem; border:1px solid rgba(164, 255, 240, 0.3); background:rgba(164, 255, 240, 0.06); border-radius:40px; font-size:.8rem; letter-spacing:.08em; color:var(--accent3); margin-bottom:3rem; font-weight: 500; }
-    .pulse { width:8px;height:8px; border-radius:50%; background:var(--accent3); animation:pulse 2.5s ease-in-out infinite; }
-    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(0.9)} }
-    
-    /* Clean, modern sans-serif geometric font for titles */
-    h1 { font-size:clamp(4.5rem,10vw,9rem); font-weight:300; letter-spacing:-.01em; line-height:.85; margin-bottom:.5rem; font-family: var(--font-body); }
-    h1 .sur { display:block; font-weight:300; background:linear-gradient(135deg, var(--accent) 20%, #FFFFFF, var(--accent2) 80%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-    
-    .hero-role { font-family: var(--font-display); font-size:.9rem; letter-spacing:.25em; text-transform:uppercase; color:var(--muted); margin:2.5rem 0; font-weight: 400; }
-    .hero-desc { font-size:1.1rem; color:var(--muted); line-height:2; max-width:550px; margin:0 auto 3.5rem; font-weight:300; }
-    .hero-btns { display:flex; gap:1.2rem; justify-content:center; flex-wrap:wrap; }
-    .btn { padding:1rem 2.8rem; border:1px solid var(--glass-b); background:var(--glass); color:var(--text); font-size:.9rem; letter-spacing:.05em; text-decoration:none; border-radius:50px; backdrop-filter:blur(10px); transition:all .3s; display:inline-block; font-weight: 500; }
-    .btn:hover { border-color:var(--accent); color:var(--accent); background:rgba(174, 226, 255, 0.05); }
-    .btn.p { background:rgba(174, 226, 255, 0.1); border-color:rgba(174, 226, 255, 0.4); color:var(--accent); }
-    .btn.p:hover { background:rgba(174, 226, 255, 0.2); }
-
-    /* Redesigned orb visual to look exactly like the galaxy orb in image_0.png */
-    .hero-orb-wrap { margin:5rem auto 0; width:160px; height:160px; position:relative; }
-    .hero-orb { width:100%;height:100%; border-radius:50%; background: radial-gradient(circle at center, #FFFFFF, #AEE2FF 30%, var(--accent2) 60%, rgba(10, 17, 24, 0) 100%); border: 1px solid rgba(255, 255, 255, 0.3); box-shadow: 0 0 100px var(--orb-glow); transform: translate(var(--mouse-x, 0), var(--mouse-y, 0)); transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1); animation: lev 5s ease-in-out infinite, shim 8s ease-in-out infinite; }
-    .hero-orb::before { content:''; position:absolute; inset:-30px; border-radius:50%; border:1px solid rgba(239, 244, 249, 0.1); animation:lev 5s ease-in-out infinite reverse; }
-    .hero-orb::after { content:''; position:absolute; inset:-1px; border-radius:50%; background: linear-gradient(135deg, rgba(164, 255, 240, 0.2), transparent, rgba(198, 170, 255, 0.2)); filter: blur(2px); }
-    @keyframes lev { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-18px)} }
-    @keyframes shim { 0%,100%{box-shadow:0 0 100px var(--orb-glow)} 50%{box-shadow:0 0 140px rgba(174, 226, 255, 0.3)} }
-
-    /* Sections */
-    section { position:relative; z-index:1; padding:9rem 3rem; }
-    .si { max-width:1150px; margin:0 auto; }
-    .eyebrow { font-family: var(--font-display); font-size:.7rem; letter-spacing:.3em; text-transform:uppercase; color:var(--accent); margin-bottom:1.2rem; opacity:.7; font-weight: 400; }
-    
-    /* Clean sans-serif geometric font for section titles */
-    h2 { font-family: var(--font-body); font-size:clamp(2.5rem,5vw,5rem); font-weight:300; letter-spacing:-.01em; line-height:1.05; margin-bottom:3.5rem; }
-    h2 em { font-style:normal; color:var(--accent); }
-
-    /* Glass Card */
-    .gc { background:var(--glass); border:1px solid var(--glass-b); border-radius:24px; backdrop-filter:blur(25px); padding:2.5rem 2.8rem; transition:border-color .3s,background .3s; }
-    .gc:hover { border-color:rgba(174, 226, 255, 0.3); background:rgba(200, 230, 255, 0.08); }
-
-    /* About */
-    #about { background:linear-gradient(180deg,transparent,rgba(16, 23, 32, 0.5) 50%,transparent); }
-    .about-grid { display:grid; grid-template-columns:1.2fr 0.8fr; gap:5rem; align-items:start; }
-    .about-text p { color:var(--muted); font-size:1.05rem; line-height:2; font-weight:300; margin-bottom:1.5rem; }
-    .about-text p strong { color:var(--text); font-weight:500; }
-    
-    /* Small gradient and glow on award chip */
-    .award-chip { display:inline-flex; align-items:center; gap:.6rem; padding:.5rem 1.1rem; border:1px solid rgba(198, 170, 255, 0.3); background:linear-gradient(135deg, rgba(198, 170, 255, 0.1), rgba(164, 255, 240, 0.06)); border-radius:30px; color:var(--accent2); font-size:.8rem; letter-spacing:.05em; margin-bottom:2rem; font-weight: 500; box-shadow: 0 0 15px rgba(198, 170, 255, 0.2); }
-    
-    .skills-panel { display:flex; flex-direction:column; gap:1.8rem; }
-    .sg-label { font-family: var(--font-display); font-size:.7rem; letter-spacing:.25em; text-transform:uppercase; color:var(--accent); opacity:.6; margin-bottom:.9rem; font-weight: 400; }
-    .pills { display:flex; flex-wrap:wrap; gap:.5rem; }
-    
-    /* Clean monospaced font for pills */
-    .pill { font-family: var(--font-display); font-size:.75rem; padding:.35rem 1rem; border:1px solid var(--glass-b); border-radius:30px; color:var(--muted); background:var(--glass); transition:all .25s; font-weight: 400; }
-    .pill:hover { border-color:var(--accent); color:var(--accent); background: rgba(174, 226, 255, 0.05); }
-    .pill.hi { border-color:rgba(174, 226, 255, 0.4); color:var(--accent); background:rgba(174, 226, 255, 0.1); }
-
-    /* Projects */
-    .pgrid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-top: 3rem; }
-    .proj { background:var(--glass); border:1px solid var(--glass-b); border-radius:24px; padding:2.5rem; position:relative; transition:border-color .3s, background .3s; overflow:hidden; backdrop-filter:blur(25px); }
-    .proj::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at 80% 20%,rgba(174, 226, 255, 0.15),transparent 60%); opacity:0; transition:opacity .4s; }
-    .proj:hover { border-color:rgba(174, 226, 255, 0.4); background:rgba(200, 230, 255, 0.1); }
-    .proj:hover::before { opacity:1; }
-    .proj.wide { grid-column:span 2; }
-    
-    /* Small glow on active card border */
-    .proj.ac { border-top:1px solid rgba(174, 226, 255, 0.3); box-shadow: 0 0 20px rgba(174, 226, 255, 0.1); }
-    
-    .proj-num { font-family: var(--font-display); font-size:.7rem; color:var(--muted); letter-spacing:.2em; margin-bottom:1.8rem; opacity:.6; font-weight: 400; }
-    
-    /* Minimalistic glyph placeholder to simulate SVG icons in style of image_0.png */
-    .proj-glyph { font-family: var(--font-display); width:42px;height:42px; border-radius:50%; border:1px solid rgba(174, 226, 255, 0.3); display:flex;align-items:center;justify-content:center; font-size:1.1rem; margin-bottom:1.5rem; background:linear-gradient(135deg, rgba(174, 226, 255, 0.15), rgba(10, 17, 24, 0)); color: var(--accent); font-weight: 700; box-shadow: 0 0 10px rgba(174, 226, 255, 0.1); }
-    
-    .proj-title { font-family:var(--font-body); font-size:1.4rem; font-weight:400; margin-bottom:.8rem; line-height:1.2; letter-spacing:-.01em; }
-    .proj-desc { color:var(--muted); font-size:.9rem; line-height:1.8; margin-bottom:1.8rem; font-weight:300; }
-    .proj-tags { display:flex; flex-wrap:wrap; gap:.5rem; }
-    
-    /* Clean monospaced font for tags */
-    .proj-tag { font-family: var(--font-display); font-size:.65rem; padding:.3rem .8rem; border:1px solid var(--glass-b); border-radius:20px; color:var(--muted); letter-spacing:.05em; opacity:.8; font-weight: 400; }
-
-    /* Experience */
-    #experience { background:linear-gradient(180deg,transparent,rgba(16, 23, 32, 0.4) 50%,transparent); }
-    .exp-list { display:flex; flex-direction:column; }
-    .exp-item { display:grid; grid-template-columns:200px 1fr; gap:4rem; padding:3rem 0; border-bottom:1px solid var(--glass-b); }
-    .exp-item:last-child { border-bottom:none; }
-    .exp-date { font-family: var(--font-display); font-size:.8rem; color:var(--muted); font-weight:400; padding-top:.3rem; line-height:1.6; letter-spacing: .02em; }
-    .now { display:inline-block; margin-top:.5rem; padding:.2rem .6rem; border:1px solid rgba(164, 255, 240, 0.3); background:rgba(164, 255, 240, 0.06); border-radius:20px; color:var(--accent3); font-size:.65rem; letter-spacing:.1em; font-weight: 500; }
-    .exp-role { font-family:var(--font-body); font-size:1.3rem; font-weight:400; margin-bottom:.3rem; letter-spacing:-.01em; }
-    .exp-co { font-family: var(--font-display); color:var(--accent); font-size:.85rem; margin-bottom:1.2rem; letter-spacing:.05em; font-weight: 400; }
-    .exp-ul { list-style:none; }
-    .exp-ul li { font-size:.95rem; color:var(--muted); line-height:1.8; margin-bottom:.5rem; padding-left:1.5rem; position:relative; font-weight:300; }
-    /* Minimalistic circle marker for list items */
-    .exp-ul li::before { content:'\25CB'; position:absolute; left:0; color:var(--accent); opacity:.7; font-size: 0.8rem; }
-
-    /* Education */
-    .edu-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.8rem; margin-bottom:4rem; }
-    .edu-card { position:relative; overflow:hidden; border-radius:24px; }
-    
-    /* Integrated the LED line light concept from the image */
-    .edu-card::after { content:''; position:absolute; top:-40px;right:-40px; width:140px;height:140px; border-radius:50%; background:radial-gradient(circle, rgba(174, 226, 255, 0.1), transparent); }
-    .edu-card::before { content:''; position:absolute; bottom:-1px; left:20px; right:20px; height: 1px; background: linear-gradient(90deg, transparent, rgba(239, 244, 249, 0.2), transparent); }
-    
-    .edu-period { font-family: var(--font-display); font-size:.7rem; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); opacity:.8; margin-bottom:.9rem; font-weight: 400; }
-    .edu-deg { font-family:var(--font-body); font-size:1.2rem; font-weight:400; margin-bottom:.4rem; letter-spacing:-.01em; }
-    .edu-inst { font-family: var(--font-display); color:var(--muted); font-size:.8rem; margin-bottom:1.4rem; font-weight:400; }
-    .edu-ul { list-style:none; }
-    .edu-ul li { font-size:.9rem; color:var(--muted); padding-left:1.2rem; position:relative; margin-bottom:.5rem; line-height:1.7; font-weight:300; }
-    /* Minimalistic dash marker for list items */
-    .edu-ul li::before { content:'\2014'; position:absolute; left:0; color:var(--accent); opacity:.5; font-size:.8rem; }
-    
-    .certs { display:flex; flex-wrap:wrap; gap:1rem; }
-    /* Clean, minimalistic cerificate tag */
-    .cert { display:flex; align-items:center; gap:.8rem; padding:.65rem 1.4rem; border:1px solid var(--glass-b); border-radius:30px; font-size:.8rem; color:var(--muted); background:var(--glass); backdrop-filter:blur(10px); }
-
-    /* Contact */
-    #contact { padding-bottom:12rem; }
-    .ct-inner { display:grid; grid-template-columns:1fr 1fr; gap:6rem; align-items:center; }
-    .ct-inner h2 { margin-bottom:1.5rem; }
-    .ct-inner p { color:var(--muted); font-size:1rem; line-height:2; font-weight:300; max-width:400px; }
-    .ct-links { display:flex; flex-direction:column; gap:1rem; }
-    
-    /* Clean contact link card */
-    .ct-link { display:flex; align-items:center; gap:1.2rem; padding:1.2rem 1.8rem; border:1px solid var(--glass-b); border-radius:16px; background:var(--glass); text-decoration:none; color:var(--text); font-size:1rem; font-weight:300; transition:all .3s; backdrop-filter:blur(10px); }
-    .ct-link:hover { border-color:rgba(174, 226, 255, 0.4); background:rgba(174, 226, 255, 0.05); color:var(--accent); }
-    
-    /* Minimalistic icon placeholder for contact links */
-    .ct-link .ico { font-family: var(--font-display); font-size:1.1rem; opacity:.8; color: var(--accent); font-weight: 700; }
-    
-    .ct-link .lbl { font-family: var(--font-display); font-size:.7rem; color:var(--muted); display:block; letter-spacing:.1em; text-transform:uppercase; margin-bottom:.2rem; font-weight: 400; }
-
-    /* Footer */
-    footer { position:relative; z-index:1; padding:2.5rem 3rem; border-top:1px solid var(--glass-b); display:flex; justify-content:space-between; align-items:center; font-size:.8rem; color:var(--muted); font-weight:300; background: rgba(10, 17, 24, 0.5); backdrop-filter:blur(25px); }
-    footer span:last-child { color: rgba(239, 244, 249, 0.4); letter-spacing: .1em; font-family: var(--font-display); }
-
-    /* Reveal Animation */
-    .rv { opacity:0; transform:translateY(25px); transition:opacity .8s ease,transform .8s ease; }
-    .rv.in { opacity:1; transform:translateY(0); }
-
-    /* ── HAMBURGER BUTTON ── */
-    .nav-hamburger {
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 5px;
-      width: 40px;
-      height: 40px;
-      background: none;
-      border: 1px solid var(--glass-b);
-      border-radius: 10px;
-      cursor: pointer;
-      padding: 0;
-      z-index: 200;
-      position: relative;
-      flex-shrink: 0;
-    }
-    .nav-hamburger span {
-      display: block;
-      width: 18px;
-      height: 1.5px;
-      background: var(--accent);
-      border-radius: 2px;
-      transition: transform 0.35s cubic-bezier(0.23,1,0.32,1), opacity 0.25s ease, width 0.3s ease;
-      transform-origin: center;
-    }
-    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-    .nav-hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
-    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
-
-    /* ── MOBILE DRAWER OVERLAY ── */
-    .nav-drawer {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 150;
-      pointer-events: none;
-    }
-    .nav-drawer-backdrop {
-      position: absolute;
-      inset: 0;
-      background: rgba(10, 17, 24, 0.75);
-      backdrop-filter: blur(6px);
-      opacity: 0;
-      transition: opacity 0.35s ease;
-    }
-    .nav-drawer-panel {
-      position: absolute;
-      top: 0; right: 0;
-      width: min(300px, 80vw);
-      height: 100%;
-      background: rgba(14, 22, 33, 0.97);
-      border-left: 1px solid var(--glass-b);
-      backdrop-filter: blur(40px);
-      transform: translateX(100%);
-      transition: transform 0.4s cubic-bezier(0.23,1,0.32,1);
-      display: flex;
-      flex-direction: column;
-      padding: 5.5rem 2rem 3rem;
-      gap: 0;
-    }
-    .nav-drawer.open {
-      pointer-events: all;
-    }
-    .nav-drawer.open .nav-drawer-backdrop { opacity: 1; }
-    .nav-drawer.open .nav-drawer-panel { transform: translateX(0); }
-
-    .drawer-links {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      flex: 1;
-    }
-    .drawer-links li {
-      border-bottom: 1px solid var(--glass-b);
-    }
-    .drawer-links a {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1.1rem 0.5rem;
-      text-decoration: none;
-      color: var(--muted);
-      font-size: 1rem;
-      letter-spacing: 0.04em;
-      font-weight: 400;
-      transition: color 0.25s, padding-left 0.25s;
-    }
-    .drawer-links a .dl-num {
-      font-family: var(--font-display);
-      font-size: 0.62rem;
-      color: var(--accent);
-      opacity: 0.5;
-      letter-spacing: 0.15em;
-      min-width: 2.5rem;
-    }
-    .drawer-links a:hover,
-    .drawer-links a.active {
-      color: var(--accent);
-      padding-left: 0.5rem;
-    }
-    .drawer-links a.active .dl-num { opacity: 1; }
-
-    .drawer-cta {
-      margin-top: 2rem;
-      display: block;
-      text-align: center;
-      padding: 1rem;
-      border: 1px solid rgba(174, 226, 255, 0.4);
-      background: rgba(174, 226, 255, 0.08);
-      border-radius: 40px;
-      color: var(--accent);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-      letter-spacing: 0.05em;
-      transition: background 0.25s;
-    }
-    .drawer-cta:hover { background: rgba(174, 226, 255, 0.15); }
-
-    .drawer-footer {
-      margin-top: 2rem;
-      font-family: var(--font-display);
-      font-size: 0.65rem;
-      color: var(--muted);
-      letter-spacing: 0.12em;
-      opacity: 0.4;
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 960px) {
-      nav { padding: 1rem 1.5rem; }
-      .nav-links { display: none; }
-      .nav-cta { display: none; }
-      .nav-hamburger { display: flex; }
-      .nav-drawer { display: block; }
-
-      section { padding: 5.5rem 1.5rem; }
-      #hero { padding: 7rem 1.5rem 3rem; }
-      h1 { font-size: clamp(3rem, 12vw, 4.5rem); }
-      h2 { font-size: clamp(2rem, 8vw, 3rem); margin-bottom: 2rem; }
-
-      .hero-role { font-size: 0.75rem; letter-spacing: 0.15em; margin: 1.5rem 0; }
-      .hero-desc { font-size: 0.95rem; margin-bottom: 2.5rem; }
-      .hero-btns { gap: 0.8rem; }
-      .btn { padding: 0.85rem 1.8rem; font-size: 0.85rem; }
-      .hero-orb-wrap { width: 120px; height: 120px; margin-top: 3.5rem; }
-
-      .about-grid,
-      .edu-grid,
-      .ct-inner { grid-template-columns: 1fr; gap: 2.5rem; }
-
-      .gc { padding: 1.6rem 1.8rem; }
-
-      .pgrid { grid-template-columns: 1fr; gap: 1rem; }
-      .proj.wide { grid-column: span 1; }
-      .proj { padding: 1.8rem; }
-
-      .exp-item { grid-template-columns: 1fr; gap: 0.4rem; padding: 2rem 0; }
-      .exp-date { display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
-      .now { margin-top: 0; }
-
-      .pill { font-size: 0.72rem; padding: 0.4rem 0.9rem; }
-      .cert { padding: 0.7rem 1.1rem; }
-
-      .ct-inner p { max-width: none; }
-      .ct-link { padding: 1rem 1.2rem; font-size: 0.9rem; }
-
-      footer { flex-direction: column; gap: 0.6rem; text-align: center; padding: 1.8rem 1.5rem; }
-    }
-
-    @media (max-width: 480px) {
-      nav { padding: 0.9rem 1.2rem; }
-      .nav-logo { font-size: 1.1rem; }
-      section { padding: 4.5rem 1.2rem; }
-      #hero { padding: 6.5rem 1.2rem 2.5rem; }
-      h1 { font-size: clamp(2.8rem, 14vw, 4rem); }
-      .hero-status { font-size: 0.7rem; padding: 0.35rem 0.9rem; }
-      .pgrid { gap: 0.8rem; }
-      .proj { padding: 1.5rem 1.4rem; }
-      .gc { padding: 1.4rem 1.5rem; }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
@@ -414,7 +23,10 @@
 </div>
 
 <nav>
-  <a href="#hero" class="nav-logo"><div class="nav-logo-icon"></div>Michele <em>Deponti</em></a>
+  <a href="#hero" class="nav-logo">
+    <div class="nav-logo-icon"></div>
+    Michele <em>Deponti</em>
+  </a>
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#projects">Projects</a></li>
@@ -423,21 +35,21 @@
     <li><a href="#contact">Contact</a></li>
   </ul>
   <a href="mailto:depontimichele13@gmail.com" class="nav-cta">Get in touch</a>
+
   <button class="nav-hamburger" id="hamburger" aria-label="Open navigation" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
-<!-- Mobile Drawer -->
 <div class="nav-drawer" id="navDrawer" aria-hidden="true">
   <div class="nav-drawer-backdrop" id="drawerBackdrop"></div>
   <div class="nav-drawer-panel" role="dialog" aria-label="Navigation menu">
     <ul class="drawer-links">
-      <li><a href="#about" class="drawer-link"><span class="dl-num">01</span>About</a></li>
-      <li><a href="#projects" class="drawer-link"><span class="dl-num">02</span>Projects</a></li>
+      <li><a href="#about"      class="drawer-link"><span class="dl-num">01</span>About</a></li>
+      <li><a href="#projects"   class="drawer-link"><span class="dl-num">02</span>Projects</a></li>
       <li><a href="#experience" class="drawer-link"><span class="dl-num">03</span>Experience</a></li>
-      <li><a href="#education" class="drawer-link"><span class="dl-num">04</span>Education</a></li>
-      <li><a href="#contact" class="drawer-link"><span class="dl-num">05</span>Contact</a></li>
+      <li><a href="#education"  class="drawer-link"><span class="dl-num">04</span>Education</a></li>
+      <li><a href="#contact"    class="drawer-link"><span class="dl-num">05</span>Contact</a></li>
     </ul>
     <a href="mailto:depontimichele13@gmail.com" class="drawer-cta">Get in touch</a>
     <div class="drawer-footer">Milan, Italy · Zaragoza, Spain</div>
@@ -446,55 +58,82 @@
 
 <section id="hero">
   <div class="hero-inner">
-    <div class="hero-status"><div class="pulse"></div>Available for freelance or full-time projects</div>
+    <div class="hero-status">
+      <div class="pulse"></div>Available for freelance or full-time projects
+    </div>
+
     <h1>Michele<br><span class="sur">Deponti</span></h1>
     <p class="hero-role">Operations Specialist &nbsp;·&nbsp; Junior DevOps</p>
     <p class="hero-desc">Bridging the precision of industrial automation with the craft of modern software. Python, Docker, Linux — built to ship.</p>
+
     <div class="hero-btns">
       <a href="#projects" class="btn p">View my work</a>
-      <a href="#contact" class="btn">Get in touch</a>
+      <a href="#contact"  class="btn">Get in touch</a>
     </div>
-    <div class="hero-orb-wrap"><div class="hero-orb"></div></div>
+
+    <div class="hero-orb-wrap">
+      <div class="hero-orb"></div>
+    </div>
   </div>
 </section>
 
 <section id="about">
   <div class="si">
     <div class="about-grid">
+
       <div class="about-text rv">
         <div class="eyebrow">01 — About</div>
         <h2>Ops mindset.<br><em>Dev skillset.</em></h2>
         <div class="award-chip">✦ FORMAMENTIS InnovACTION Award 2018</div>
-          <p>
-            I am a <strong>problem solver</strong> with a technical background in electronics and industrial automation. I specialize in <strong>Software Development, DevOps, and AI</strong>, bridging the gap between industrial operations and modern cloud technology.
-          </p>
-          <p>
-            Through intensive hands-on work at <strong>IFOA Milan</strong>, I have mastered <strong>Python, Java, Docker, and Linux</strong>. My operational background means I don’t just build systems—I understand how to keep them stable when they scale.
-          </p>
-          <p class="status-line">
-            I am currently <strong>available for freelance projects and professional opportunities</strong> where I can apply my automation instincts to cloud-native infrastructure.
-          </p>
-        </div>
+        <p>
+          I am a <strong>problem solver</strong> with a technical background in electronics and industrial automation.
+          I specialize in <strong>Software Development, DevOps, and AI</strong>, bridging the gap between industrial operations and modern cloud technology.
+        </p>
+        <p>
+          Through intensive hands-on work at <strong>IFOA Milan</strong>, I have mastered <strong>Python, Java, Docker, and Linux</strong>.
+          My operational background means I don't just build systems—I understand how to keep them stable when they scale.
+        </p>
+        <p class="status-line">
+          I am currently <strong>available for freelance projects and professional opportunities</strong>
+          where I can apply my automation instincts to cloud-native infrastructure.
+        </p>
+      </div>
+
       <div class="skills-panel rv">
         <div>
-          <div class="sg-label">DevOps & Programming</div>
+          <div class="sg-label">DevOps &amp; Programming</div>
           <div class="pills">
-            <span class="pill hi">Python</span><span class="pill hi">Java</span><span class="pill hi">Docker</span><span class="pill hi">Linux</span><span class="pill">MySQL</span><span class="pill">Git / GitHub</span><span class="pill">REST APIs</span><span class="pill">CSS3</span><span class="pill">JavaScript</span>
+            <span class="pill hi">Python</span>
+            <span class="pill hi">Java</span>
+            <span class="pill hi">Docker</span>
+            <span class="pill hi">Linux</span>
+            <span class="pill">MySQL</span>
+            <span class="pill">Git / GitHub</span>
+            <span class="pill">REST APIs</span>
+            <span class="pill">CSS3</span>
+            <span class="pill">JavaScript</span>
           </div>
         </div>
         <div>
-          <div class="sg-label">Data & Design</div>
+          <div class="sg-label">Data &amp; Design</div>
           <div class="pills">
-            <span class="pill">SAS Visual Analytics</span><span class="pill">Power BI</span><span class="pill">Excel</span><span class="pill">Fusion360</span><span class="pill">AutoCAD</span><span class="pill">Photoshop</span>
+            <span class="pill">SAS Visual Analytics</span>
+            <span class="pill">Power BI</span>
+            <span class="pill">Excel</span>
+            <span class="pill">Fusion360</span>
+            <span class="pill">AutoCAD</span>
+            <span class="pill">Photoshop</span>
           </div>
         </div>
         <div>
           <div class="sg-label">Languages</div>
           <div class="pills">
-            <span class="pill">Italian — Native</span><span class="pill">English — Professional</span>
+            <span class="pill">Italian — Native</span>
+            <span class="pill">English — Professional</span>
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </section>
@@ -503,49 +142,77 @@
   <div class="si">
     <div class="eyebrow">02 — Projects</div>
     <h2>What I've <em>built</em></h2>
+
     <div class="pgrid rv">
-      <div class="proj ac">
+
+      <a href="https://github.com/DepontiMichele/Portfolio/tree/main/Portfolio-01-Java-SimCity" target="_blank" rel="noopener" class="proj ac" style="display: block; text-decoration: none; color: inherit;">
         <div class="proj-num">01 / 06</div>
         <div class="proj-glyph">🏙️</div>
         <div class="proj-title">SimCity Entity Modeling</div>
         <p class="proj-desc">City management system architected around core OOP principles — citizens, buildings, services modeled with clean inheritance hierarchies and polymorphism.</p>
-        <div class="proj-tags"><span class="proj-tag">Java</span><span class="proj-tag">OOP</span><span class="proj-tag">Inheritance</span><span class="proj-tag">Encapsulation</span></div>
-      </div>
-      <div class="proj ac">
+        <div class="proj-tags">
+          <span class="proj-tag">Java</span><span class="proj-tag">OOP</span>
+          <span class="proj-tag">Inheritance</span><span class="proj-tag">Encapsulation</span>
+        </div>
+      </a>
+
+      <a href="https://github.com/DepontiMichele/Portfolio/tree/main/Portfolio-02-SQL-MedicalCenter" target="_blank" rel="noopener" class="proj ac" style="display: block; text-decoration: none; color: inherit;">
         <div class="proj-num">02 / 06</div>
         <div class="proj-glyph">🏥</div>
         <div class="proj-title">Medical Center Database</div>
         <p class="proj-desc">Complete relational schema for a clinic's operations — patients, doctors, appointments — with robust 1:N and N:N relationship modeling and complex SQL queries.</p>
-        <div class="proj-tags"><span class="proj-tag">SQL</span><span class="proj-tag">MySQL</span><span class="proj-tag">ER Modeling</span><span class="proj-tag">Data Integrity</span></div>
-      </div>
-      <div class="proj ac">
+        <div class="proj-tags">
+          <span class="proj-tag">SQL</span><span class="proj-tag">MySQL</span>
+          <span class="proj-tag">ER Modeling</span><span class="proj-tag">Data Integrity</span>
+        </div>
+      </a>
+
+      <a href="https://github.com/DepontiMichele/Portfolio/tree/main/Portfolio-03-Python-WeatherAPI" target="_blank" rel="noopener" class="proj ac" style="display: block; text-decoration: none; color: inherit;">
         <div class="proj-num">03 / 06</div>
         <div class="proj-glyph">🌤️</div>
-        <div class="proj-title">Weather Fetcher API & Docker</div>
+        <div class="proj-title">Weather Fetcher API &amp; Docker</div>
         <p class="proj-desc">Real-time OpenWeatherMap integration, fully containerized with Docker for environment portability. JSON parsing, HTTP handling, proper DevOps deployment practice.</p>
-        <div class="proj-tags"><span class="proj-tag">Python</span><span class="proj-tag">Docker</span><span class="proj-tag">REST API</span><span class="proj-tag">JSON</span></div>
-      </div>
-      <div class="proj ac">
+        <div class="proj-tags">
+          <span class="proj-tag">Python</span><span class="proj-tag">Docker</span>
+          <span class="proj-tag">REST API</span><span class="proj-tag">JSON</span>
+        </div>
+      </a>
+
+      <a href="https://github.com/DepontiMichele/Portfolio" target="_blank" rel="noopener" class="proj ac" style="display: block; text-decoration: none; color: inherit;">
         <div class="proj-num">04 / 06</div>
         <div class="proj-glyph">🌐</div>
         <div class="proj-title">Interactive Web Dashboard</div>
         <p class="proj-desc">Modern, responsive web application built with a focus on clean UI and semantic structure. Implemented CSS Flexbox/Grid for layout fluidly across devices and used JavaScript for dynamic DOM manipulation and state management.</p>
-        <div class="proj-tags"><span class="proj-tag">HTML5</span><span class="proj-tag">CSS3</span><span class="proj-tag">JavaScript</span><span class="proj-tag">Responsive Design</span><span class="proj-tag">UI/UX</span></div>
-      </div>
-      <div class="proj ac">
+        <div class="proj-tags">
+          <span class="proj-tag">HTML5</span><span class="proj-tag">CSS3</span>
+          <span class="proj-tag">JavaScript</span><span class="proj-tag">Responsive Design</span>
+          <span class="proj-tag">UI/UX</span>
+        </div>
+      </a>
+
+      <a href="https://github.com/DepontiMichele/Portfolio/tree/main/Portfolio-04-Python-passwordgenerator" target="_blank" rel="noopener" class="proj ac" style="display: block; text-decoration: none; color: inherit;">
         <div class="proj-num">05 / 06</div>
         <div class="proj-glyph">🔐</div>
-        <div class="proj-title">Password Generator & Strength Analyzer</div>
+        <div class="proj-title">Password Generator &amp; Strength Analyzer</div>
         <p class="proj-desc">Security CLI utility for generating high-entropy passwords and analyzing strength via regex-based scoring. Clean modular architecture across three files.</p>
-        <div class="proj-tags"><span class="proj-tag">Python</span><span class="proj-tag">Regex</span><span class="proj-tag">Security</span><span class="proj-tag">Validation</span></div>
-      </div>
-      <div class="proj ac">
+        <div class="proj-tags">
+          <span class="proj-tag">Python</span><span class="proj-tag">Regex</span>
+          <span class="proj-tag">Security</span><span class="proj-tag">Validation</span>
+        </div>
+      </a>
+
+      <a href="https://github.com/DepontiMichele/Portfolio/tree/main/Portfolio-05-Cybersecurity-Audit" target="_blank" rel="noopener" class="proj ac" style="display: block; text-decoration: none; color: inherit;">
         <div class="proj-num">06 / 06</div>
         <div class="proj-glyph">🛡️</div>
         <div class="proj-title">Cybersecurity Audit — Team Project</div>
         <p class="proj-desc">Collaborative security audit identifying SQLi and XSS vulnerabilities in a sample application. Produced structured risk analysis and mitigation strategies. AI-assisted synthesis via NotebookLM for technical documentation.</p>
-        <div class="proj-tags"><span class="proj-tag">Security</span><span class="proj-tag">SQLi</span><span class="proj-tag">XSS</span><span class="proj-tag">Risk Analysis</span><span class="proj-tag">Teamwork</span><span class="proj-tag">Documentation</span></div>
-      </div>
+        <div class="proj-tags">
+          <span class="proj-tag">Security</span><span class="proj-tag">SQLi</span>
+          <span class="proj-tag">XSS</span><span class="proj-tag">Risk Analysis</span>
+          <span class="proj-tag">Teamwork</span><span class="proj-tag">Documentation</span>
+        </div>
+      </a>
+
     </div>
   </div>
 </section>
@@ -554,9 +221,14 @@
   <div class="si">
     <div class="eyebrow">03 — Experience</div>
     <h2>Where I've <em>worked</em></h2>
+
     <div class="exp-list">
+
       <div class="exp-item rv">
-        <div class="exp-date">Sept 2021 — Present<div class="now">Current</div></div>
+        <div class="exp-date">
+          Sept 2021 — Present
+          <div class="now">Current</div>
+        </div>
         <div>
           <div class="exp-role">Administrator</div>
           <div class="exp-co">GDP MULTISERVICES S.R.L.</div>
@@ -568,10 +240,11 @@
           </ul>
         </div>
       </div>
+
       <div class="exp-item rv">
         <div class="exp-date">May 2025 — Oct 2025</div>
         <div>
-          <div class="exp-role">Floor Manager & Cashier</div>
+          <div class="exp-role">Floor Manager &amp; Cashier</div>
           <div class="exp-co">Il Posto Affianco</div>
           <ul class="exp-ul">
             <li>Led front-of-house staff and managed high-precision cash operations under pressure</li>
@@ -580,6 +253,7 @@
           </ul>
         </div>
       </div>
+
     </div>
   </div>
 </section>
@@ -588,11 +262,13 @@
   <div class="si">
     <div class="eyebrow">04 — Education</div>
     <h2>How I got <em>here</em></h2>
+
     <div class="edu-grid rv">
-      <div class="gc edu-card" style="border-top:1px solid rgba(174, 226, 255, 0.3);">
+
+      <div class="gc edu-card featured">
         <div class="edu-period">2025 — Present</div>
         <div class="edu-deg">IFTS Higher Technical Education</div>
-        <div class="edu-inst">IFOA, Milan — Software Development & DevOps for Big Data · EQF 4</div>
+        <div class="edu-inst">IFOA, Milan — Software Development &amp; DevOps for Big Data · EQF 4</div>
         <ul class="edu-ul">
           <li>AI-driven development and integration across software lifecycles</li>
           <li>DevOps pipelines, system integration, and Big Data management</li>
@@ -600,9 +276,10 @@
           <li>HTML, CSS, and the web application ecosystem</li>
         </ul>
       </div>
+
       <div class="gc edu-card">
         <div class="edu-period">2013 — 2018</div>
-        <div class="edu-deg">High School Diploma — Electronics & Automation</div>
+        <div class="edu-deg">High School Diploma — Electronics &amp; Automation</div>
         <div class="edu-inst">I.S. Archimede, Italy · EQF 4</div>
         <ul class="edu-ul">
           <li>Electronic signal processing and industrial automation systems</li>
@@ -610,35 +287,44 @@
           <li>Technical design with Autodesk AutoCAD and Inventor</li>
         </ul>
       </div>
+
     </div>
-    <div class="eyebrow" style="margin-bottom:1.2rem;">Certifications</div>
+
+    <div class="eyebrow">Certifications</div>
     <div class="certs rv">
       <div class="cert"><span>✦</span> FORMAMENTIS InnovACTION Award 2018</div>
       <div class="cert"><span>◈</span> SAS Visual Analytics — Fast Track</div>
       <div class="cert"><span>◉</span> Autodesk Fusion360 — Intermediate</div>
     </div>
+
   </div>
 </section>
 
 <section id="contact">
   <div class="si">
     <div class="ct-inner">
+
       <div class="rv">
         <div class="eyebrow">05 — Contact</div>
         <h2>Let's build<br><em>something.</em></h2>
         <p>Full-stack minded Junior DevOps available for freelance and professional collaborations. If you need someone to help build, ship, and scale your next big idea, get in touch!</p>
       </div>
+
       <div class="ct-links rv">
         <a href="mailto:depontimichele13@gmail.com" class="ct-link">
-          <span class="ico">📩</span> <div><span class="lbl">Email</span>depontimichele13@gmail.com</div>
+          <span class="ico">📩</span>
+          <div><span class="lbl">Email</span>depontimichele13@gmail.com</div>
         </a>
-        <a href="https://www.linkedin.com/in/michele-deponti" target="_blank" class="ct-link">
-          <span class="ico">🔵</span> <div><span class="lbl">LinkedIn</span>linkedin.com/in/michele-deponti</div>
+        <a href="https://www.linkedin.com/in/michele-deponti" target="_blank" rel="noopener" class="ct-link">
+          <span class="ico">🔵</span>
+          <div><span class="lbl">LinkedIn</span>linkedin.com/in/michele-deponti</div>
         </a>
         <a href="tel:+393284825789" class="ct-link">
-          <span class="ico">📞</span> <div><span class="lbl">Phone</span>+39 328 482 5789</div>
+          <span class="ico">📞</span>
+          <div><span class="lbl">Phone</span>+39 328 482 5789</div>
         </a>
       </div>
+
     </div>
   </div>
 </section>
@@ -648,81 +334,6 @@
   <span>Milan, Italy &nbsp;·&nbsp; Zaragoza, Spain</span>
 </footer>
 
-<script>
-  // ── Reveal on scroll ──
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); } });
-  }, { threshold: 0.08 });
-  document.querySelectorAll('.rv').forEach(el => obs.observe(el));
-
-  // ── Active nav link on scroll (desktop) ──
-  window.addEventListener('scroll', () => {
-    const y = window.scrollY;
-    document.querySelectorAll('.nav-links a, .drawer-link').forEach(a => {
-      const s = document.querySelector(a.getAttribute('href'));
-      const isActive = s && y >= s.offsetTop - 140 && y < s.offsetTop + s.offsetHeight - 100;
-      a.style.color = isActive ? 'var(--accent)' : '';
-      if (a.classList.contains('drawer-link')) {
-        a.classList.toggle('active', isActive);
-      }
-    });
-  });
-
-  // ── Hamburger / Drawer ──
-  const hamburger = document.getElementById('hamburger');
-  const drawer    = document.getElementById('navDrawer');
-  const backdrop  = document.getElementById('drawerBackdrop');
-
-  function openDrawer() {
-    hamburger.classList.add('open');
-    hamburger.setAttribute('aria-expanded', 'true');
-    drawer.classList.add('open');
-    drawer.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeDrawer() {
-    hamburger.classList.remove('open');
-    hamburger.setAttribute('aria-expanded', 'false');
-    drawer.classList.remove('open');
-    drawer.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  }
-
-  hamburger.addEventListener('click', () => {
-    drawer.classList.contains('open') ? closeDrawer() : openDrawer();
-  });
-
-  backdrop.addEventListener('click', closeDrawer);
-
-  // Close on drawer link tap
-  document.querySelectorAll('.drawer-link, .drawer-cta').forEach(link => {
-    link.addEventListener('click', () => {
-      closeDrawer();
-    });
-  });
-
-  // Close on Escape
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeDrawer();
-  });
-
-  // ── Orb mouse parallax (desktop only) ──
-  const orb     = document.querySelector('.hero-orb');
-  const orbWrap = document.querySelector('.hero-orb-wrap');
-  if (orbWrap && window.matchMedia('(hover: hover)').matches) {
-    orbWrap.addEventListener('mousemove', (e) => {
-      const rect = orbWrap.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-      orb.style.setProperty('--mouse-x', `${x / 2}px`);
-      orb.style.setProperty('--mouse-y', `${y / 2}px`);
-    });
-    orbWrap.addEventListener('mouseleave', () => {
-      orb.style.setProperty('--mouse-x', '0px');
-      orb.style.setProperty('--mouse-y', '0px');
-    });
-  }
-</script>
+<script src="script.js"></script>
 </body>
 </html>
